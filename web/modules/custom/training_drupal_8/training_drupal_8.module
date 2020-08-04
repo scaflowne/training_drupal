@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 
 /**
  * Implements hook_help().
@@ -21,4 +22,19 @@ function training_drupal_8_help($route_name, RouteMatchInterface $route_match) {
 
     default:
   }
+}
+
+/**
+ * Implements hook_install().
+ */
+function training_drupal_8_install() {
+  $menu_link = MenuLinkContent::create([
+    'title' => 'Trainig D8 - Hello',
+    'link' => ['uri' => 'internal:/training-drupal-8/hello'],
+    'menu_name' => 'main',
+    'weight' => 2,
+    'expanded' => TRUE,
+  ]);
+
+  $menu_link->save();
 }
