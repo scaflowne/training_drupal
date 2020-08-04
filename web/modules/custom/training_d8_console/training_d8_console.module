@@ -1,6 +1,32 @@
 <?php
 
+use Drupal\taxonomy\Entity\Term;
+
 /**
- * @file
- * Contains training_d8_console.module.
+ * Implements hook_install().
  */
+function training_d8_console_install() {
+
+  // Add a Term to Vocabolary Tags
+  $term_value = 'Term by training_d8_console';
+  $vocabulary = 'tags';
+
+  if (!taxonomy_term_load_multiple_by_name($term_value, $vocabulary)) {
+    $term = Term::create([
+      'name' => $term_value,
+      'vid' => $vocabulary,
+    ]);
+    $term->save();
+  }
+
+  // Add a State Variable
+  \Drupal::state()->set('training_d8_console','this is a value');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function training_d8_console_uninstall() {
+  // Delete 'training_d8_console' state variable
+  \Drupal::state()->delete('training_d8_console');
+}

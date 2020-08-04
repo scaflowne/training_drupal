@@ -24,6 +24,7 @@
         "drupal/core": "^8.8.0",
         "drupal/core-composer-scaffold": "^8.8.0",
         "drupal/ctools": "^3.4",
+        "drupal/devel": "^4.0",
         "drupal/pathauto": "^1.8",
         "drush/drush": "^9.7.1 | ^10.0.0",
         "vlucas/phpdotenv": "^4.0",
