@@ -1,0 +1,7 @@
+training_drupal_8.hello_form:
+  path: '/training-drupal-8/hello'
+  defaults:
+    _form: '\Drupal\training_drupal_8\Form\HelloForm'
+    _title: 'Hello'
+  requirements:
+    _access: 'TRUE'
