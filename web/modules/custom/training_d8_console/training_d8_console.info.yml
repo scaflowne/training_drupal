@@ -1,0 +1,7 @@
+name: 'Training Drupal 8 Console'
+type: module
+description: 'Description Custom Training Drupal 8 Console'
+core: 8.x
+package: 'BITS'
+dependencies:
+  - pathauto
