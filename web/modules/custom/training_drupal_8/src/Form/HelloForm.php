@@ -23,9 +23,6 @@ class HelloForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
 
-    $val = \Drupal::state()->get('training_d8_console');
-    dump($val);
-
     return $form;
   }
 
