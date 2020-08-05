@@ -6,3 +6,11 @@ bits_pages.bits_pages_simple_controller_hello:
     _title: 'Página con mensaje simple'
   requirements:
     _permission: 'access content'
+
+bits_pages.bits_pages_calculator_controller_Calculator:
+  path: 'bits_pages.calculator'
+  defaults:
+    _controller: '\Drupal\bits_pages\Controller\BitsPagesCalculatorController::Calculator'
+    _title: 'Bits Pages Calculator'
+  requirements:
+    _permission: 'access content'
