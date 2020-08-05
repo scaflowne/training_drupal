@@ -47,21 +47,23 @@ class BitsPagesLinksController extends ControllerBase {
    */
   public function links() {
 
-    $items = [];
-    $items[] = Link::fromTextAndUrl('Administración de bloques',
-      Url::fromUserInput('/admin/structure/block'));
-    $items[] = Link::fromTextAndUrl('Administración de contenidos',
-      Url::fromUserInput('/admin/content'));
-    $items[] = Link::fromTextAndUrl('Administración de usuarios',
-      Url::fromUserInput('/admin/people'));
-    $items[] = Link::fromTextAndUrl('Enlace a la portada del sitio',
-      Url::fromUri('internal:/'));
-    $items[] = Link::createFromRoute('Enlace al nodo con id 1',
-      'entity.node.canonical', ['node' => 1]);
-    $items[] = Link::fromTextAndUrl('Enlace a la edición del nodo con id 1',
-      Url::fromUri('internal:/node/1/edit'));
-    $items[] = Link::fromTextAndUrl('Enlace externo a www.google.com',
-      Url::fromUri('http://www.google.com', ['attributes' => ['target' => '_blank']]));
+    $items = [
+      Link::fromTextAndUrl('Administración de bloques',
+        Url::fromUserInput('/admin/structure/block')),
+      Link::fromTextAndUrl('Administración de contenidos',
+        Url::fromUserInput('/admin/content')),
+      Link::fromTextAndUrl('Administración de usuarios',
+        Url::fromUserInput('/admin/people')),
+      Link::fromTextAndUrl('Enlace a la portada del sitio',
+        Url::fromUri('internal:/')),
+      Link::createFromRoute('Enlace al nodo con id 1',
+      'entity.node.canonical', ['node' => 1]),
+      Link::fromTextAndUrl('Enlace a la edición del nodo con id 1',
+        Url::fromUri('internal:/node/1/edit')),
+      Link::fromTextAndUrl('Enlace externo a www.google.com',
+        Url::fromUri('http://www.google.com',
+          ['attributes' => ['target' => '_blank']])),
+    ];
 
     $output = [
       '#theme' => 'item_list',
