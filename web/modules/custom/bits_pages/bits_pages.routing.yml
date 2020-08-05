@@ -14,3 +14,11 @@ bits_pages.bits_pages_calculator_controller_Calculator:
     _title: 'Bits Pages Calculator'
   requirements:
     _permission: 'access content'
+
+bits_pages.bits_pages_links_controller_links:
+  path: 'bits_pages.links'
+  defaults:
+    _controller: '\Drupal\bits_pages\Controller\BitsPagesLinksController::links'
+    _title: 'Bits Pages Links'
+  requirements:
+    _permission: 'access content'
