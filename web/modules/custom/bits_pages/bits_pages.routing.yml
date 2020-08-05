@@ -1,0 +1,8 @@
+
+bits_pages.bits_pages_simple_controller_hello:
+  path: 'bits_pages.simple'
+  defaults:
+    _controller: '\Drupal\bits_pages\Controller\BitsPagesSimpleController::hello'
+    _title: 'Página con mensaje simple'
+  requirements:
+    _permission: 'access content'

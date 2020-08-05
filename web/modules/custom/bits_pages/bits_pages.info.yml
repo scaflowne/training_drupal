@@ -1,0 +1,5 @@
+name: 'BITS Pages'
+type: module
+description: 'Custom BITS Pages'
+core: 8.x
+package: 'BITS'
