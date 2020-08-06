@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains bits_forms.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function bits_forms_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the bits_forms module.
+    case 'help.page.bits_forms':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Custom Bits Forms') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function hook_module_uninstall(){
+  // Delete schema bits forms simple
+  drupal_uninstall_schema('bits_forms');
+}

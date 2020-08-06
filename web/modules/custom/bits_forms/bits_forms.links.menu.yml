@@ -1,0 +1,4 @@
+bits_forms.simple:
+  title: 'Bits Forms - Simple Form'
+  parent: system.admin_config_services
+  route_name: 'bits_forms.simple_form'

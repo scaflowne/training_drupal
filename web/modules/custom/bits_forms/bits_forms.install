@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Contains bits_forms.module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function bits_forms_schema() {
+  // Schema to Simple Form From module Bits Forms
+  $schema['bits_forms_simple'] = [
+    'description' => 'The base table for Simple Form.',
+    'fields' => [
+      'fid' => [
+        'description' => 'The primary identifier for a Simple Form.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'title' => [
+        'description' => 'The Simple form title.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'username' => [
+        'description' => 'The Simple form Username.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'email' => [
+        'description' => 'The Simple form Email.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'timestamp' => [
+        'description' => 'Time of consent.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'fid',
+    ],
+  ];
+
+  return $schema;
+}
