@@ -13,7 +13,7 @@ bits_pages.bits_pages_calculator_controller_Calculator:
     _controller: '\Drupal\bits_pages\Controller\BitsPagesCalculatorController::Calculator'
     _title: 'Bits Pages Calculator'
   requirements:
-    _permission: 'access content'
+    _permission: 'access calculator'
 
 bits_pages.bits_pages_links_controller_links:
   path: 'bits_pages.links'

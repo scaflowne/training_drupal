@@ -1,0 +1,9 @@
+bits_pages.calculator:
+  title: 'Bits Pages - Calculator'
+  parent: system.admin_config_services
+  route_name: 'bits_pages.bits_pages_calculator_controller_Calculator'
+
+bits_pages.links:
+  title: 'Bits Pages - Links'
+  parent: system.admin_config_services
+  route_name: 'bits_pages.bits_pages_links_controller_links'
