@@ -7,6 +7,8 @@ use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
  * Class BitsPagesLinksController.
@@ -21,13 +23,24 @@ class BitsPagesLinksController extends ControllerBase {
   protected $renderer;
 
   /**
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * Constructs a BitsPagesLinksController object.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   *
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter service.
    */
-  public function __construct(RendererInterface $renderer) {
+  public function __construct(RendererInterface $renderer, DateFormatterInterface $date_formatter) {
     $this->renderer = $renderer;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -36,6 +49,7 @@ class BitsPagesLinksController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('renderer'),
+      $container->get('date.formatter'),
     );
   }
 
@@ -65,7 +79,7 @@ class BitsPagesLinksController extends ControllerBase {
           ['attributes' => ['target' => '_blank']])),
     ];
 
-    $output = [
+    $list = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#title' => 'My Menu',
@@ -74,10 +88,17 @@ class BitsPagesLinksController extends ControllerBase {
       '#wrapper_attributes' => ['class' => 'my_list_container'],
     ];
 
-    return [
+    $output['date'] = [
       '#type' => 'markup',
-      '#markup' =>  $this->renderer->render($output)
+      '#markup' =>  $this->t('Today is @date', ['@date' => $this->dateFormatter->format(REQUEST_TIME, 'custom', 'Y:m:d')])
     ];
+
+    $output['list'] = [
+      '#type' => 'markup',
+      '#markup' =>  $this->renderer->render($list)
+    ];
+
+    return $output;
   }
 
 }

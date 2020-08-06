@@ -4,11 +4,39 @@ namespace Drupal\bits_pages\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Class BitsPagesCalculatorController.
  */
 class BitsPagesCalculatorController extends ControllerBase {
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
+   * Constructs a new ListingEmpty.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   */
+  public function __construct(AccountInterface $current_user) {
+    $this->currentUser = $current_user;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('current_user'),
+    );
+  }
 
   /**
    * Calculator.
@@ -18,6 +46,7 @@ class BitsPagesCalculatorController extends ControllerBase {
    */
   public function Calculator(Request $request) {
 
+    // Assing value to GETs URL.
     $op = $request->query->get('op');
     $num1 = $request->query->get('num1');
     $num2 = $request->query->get('num2');
@@ -77,10 +106,31 @@ class BitsPagesCalculatorController extends ControllerBase {
       );
     }
 
-    return [
+    $general = $this->t('Welcome to my Calculator page.');
+    if ($this->currentUser->hasPermission('administer nodes')) {
+      $general = $this->t('Welcome <b>:name</b> user to my Calculator page.',
+        [':name' => $this->currentUser->getAccountName()]);
+    }
+
+    $return['general'] = [
+      '#type' => 'markup',
+      '#markup' => "<p>{$general}</p>",
+    ];
+
+    $return['description'] = [
+      '#type' => 'markup',
+      '#markup' => $this->t('<p>Parameters:<br/>
+        op=[ suma, resta, multi, divi ]<br/>
+        num1=[ debe ser numero ]<br/>
+        num2=[ debe ser numero ]</p>'),
+    ];
+
+    $return['result'] = [
       '#type' => 'markup',
       '#markup' => $result,
     ];
+
+    return $return;
   }
 
 }
