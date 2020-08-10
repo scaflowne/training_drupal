@@ -13,7 +13,7 @@ function bits_forms_schema() {
   $schema['bits_forms_simple'] = [
     'description' => 'The base table for Simple Form.',
     'fields' => [
-      'fid' => [
+      'id' => [
         'description' => 'The primary identifier for a Simple Form.',
         'type' => 'serial',
         'unsigned' => TRUE,
@@ -25,6 +25,13 @@ function bits_forms_schema() {
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
+      ],
+      'uid' => [
+        'description' => 'The UID of the user',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
       ],
       'username' => [
         'description' => 'The Simple form Username.',
@@ -40,6 +47,13 @@ function bits_forms_schema() {
         'not null' => TRUE,
         'default' => '',
       ],
+      'ip' => [
+        'description' => 'The IP from sending the values',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
       'timestamp' => [
         'description' => 'Time of consent.',
         'type' => 'int',
@@ -49,7 +63,7 @@ function bits_forms_schema() {
       ],
     ],
     'primary key' => [
-      'fid',
+      'id',
     ],
   ];
 

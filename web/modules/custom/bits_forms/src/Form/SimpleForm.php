@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Component\Utility\EmailValidatorInterface;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Class SimpleForm.
@@ -36,6 +37,13 @@ class SimpleForm extends FormBase {
   protected $emailValidator;
 
   /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * Constructs a new ListingEmpty.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
@@ -46,15 +54,20 @@ class SimpleForm extends FormBase {
    *
    * @param \Drupal\Component\Utility\EmailValidatorInterface $email_validator
    *   The email validator.
+   *
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
   public function __construct(
       AccountInterface $current_user,
       Connection $database,
-      EmailValidatorInterface $email_validator
+      EmailValidatorInterface $email_validator,
+      TimeInterface $time
     ) {
     $this->currentUser = $current_user;
     $this->database = $database;
     $this->emailValidator = $email_validator;
+    $this->time = $time;
   }
 
   /**
@@ -65,6 +78,7 @@ class SimpleForm extends FormBase {
       $container->get('current_user'),
       $container->get('database'),
       $container->get('email.validator'),
+      $container->get('datetime.time'),
     );
   }
 
@@ -79,6 +93,7 @@ class SimpleForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+
     $form['titulo'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Título'),
@@ -134,15 +149,28 @@ class SimpleForm extends FormBase {
         }
       }
 
-      if (
-          $key == 'username' &&
-          $this->currentUser->id() &&
-          $value !== $this->currentUser->getAccountName()
-        ) {
-        $form_state->setErrorByName(
-          $key,
-          $this->t('El Usuario no debe ser diferente al registrado en la cuenta')
-        );
+      if ($key == 'username' &&$this->currentUser->id()) {
+        // Validate that don't change the username
+        if ($value !== $this->currentUser->getAccountName()) {
+          $form_state->setErrorByName(
+            $key,
+            $this->t('El Usuario no debe ser diferente al registrado en la cuenta')
+          );
+        }
+        // Validate if the UID exists in the database
+        $query = $this->database->select('bits_forms_simple', 'bfs');
+        $query->addExpression('COUNT(uid)');
+        $count = $query->condition('bfs.uid', $this->currentUser->id())
+          ->execute()
+          ->fetchField();
+
+        if ($count) {
+          $form_state->setErrorByName(
+            $key,
+            $this->t('El Usuario ya esta registrado en el formulario')
+          );
+        }
+
       }
 
       if ($key == 'email' && !$this->emailValidator->isValid(trim($value))) {
@@ -168,11 +196,29 @@ class SimpleForm extends FormBase {
     $this->database->merge('bits_forms_simple')
       ->keys([
         'title' => $values['titulo'],
+        'uid' => $this->currentUser->id(),
         'username' => $values['username'],
         'email' => $values['email'],
+        'ip' => $this->getRequest()->getClientIP(),
+        'timestamp' => $this->time->getCurrentTime(),
       ])->execute();
 
-      \Drupal::messenger()->addMessage($this->t('Save Form'));
+      $this->messenger()->addStatus(
+        $this->t('El @username a sido guardado',
+          ['@username' => $values['username']]
+        )
+      );
+
+      $this->logger('SimpleForm')->notice(
+        'Added UID:@uid, User: @username and Title: @title',
+        [
+          '@uid' => $this->currentUser->id(),
+          '@username' => $values['username'],
+          '@title' => $values['titulo'],
+        ]
+      );
+
+      $form_state->setRedirect('bits_pages.bits_pages_simple_controller_hello');
   }
 
 }
