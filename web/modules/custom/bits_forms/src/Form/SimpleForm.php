@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Component\Utility\EmailValidatorInterface;
 
 /**
  * Class SimpleForm.
@@ -27,6 +28,12 @@ class SimpleForm extends FormBase {
    */
   protected $database;
 
+  /**
+   * The email validator.
+   *
+   * @var \Drupal\Component\Utility\EmailValidatorInterface
+   */
+  protected $emailValidator;
 
   /**
    * Constructs a new ListingEmpty.
@@ -36,10 +43,18 @@ class SimpleForm extends FormBase {
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
+   *
+   * @param \Drupal\Component\Utility\EmailValidatorInterface $email_validator
+   *   The email validator.
    */
-  public function __construct(AccountInterface $current_user, Connection $database) {
+  public function __construct(
+      AccountInterface $current_user,
+      Connection $database,
+      EmailValidatorInterface $email_validator
+    ) {
     $this->currentUser = $current_user;
     $this->database = $database;
+    $this->emailValidator = $email_validator;
   }
 
   /**
@@ -49,6 +64,7 @@ class SimpleForm extends FormBase {
     return new static(
       $container->get('current_user'),
       $container->get('database'),
+      $container->get('email.validator'),
     );
   }
 
@@ -70,6 +86,7 @@ class SimpleForm extends FormBase {
       '#size' => 64,
       '#weight' => '0',
       '#required' => TRUE,
+      '#maxlength' => 30,
     ];
     $form['username'] = [
       '#type' => 'textfield',
@@ -101,6 +118,43 @@ class SimpleForm extends FormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     foreach ($form_state->getValues() as $key => $value) {
       // @TODO: Validate fields.
+
+      // Validate title field
+      if ( $key == 'titulo') {
+        // Check if the firts letter is upper
+        if (!ctype_upper(mb_substr($value, 0, 1))) {
+          $form_state->setErrorByName(
+            $key, $this->t('El Título debe iniciar en Mayuscula'));
+        }
+        if (!in_array(strlen($value), range(5, 30))) {
+          $form_state->setErrorByName(
+            $key,
+            $this->t('El campo de Título debe tener entre 5 a 30 carácteres')
+          );
+        }
+      }
+
+      if (
+          $key == 'username' &&
+          $this->currentUser->id() &&
+          $value !== $this->currentUser->getAccountName()
+        ) {
+        $form_state->setErrorByName(
+          $key,
+          $this->t('El Usuario no debe ser diferente al registrado en la cuenta')
+        );
+      }
+
+      if ($key == 'email' && !$this->emailValidator->isValid(trim($value))) {
+        $form_state->setErrorByName(
+          $key,
+          $this->t(
+            $this->t('@emailaddress is an invalid email address.',
+              ['@emailaddress' => $value])
+          )
+        );
+      }
+
     }
     parent::validateForm($form, $form_state);
   }
