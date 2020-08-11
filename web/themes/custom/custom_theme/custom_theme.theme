@@ -91,6 +91,7 @@ function custom_theme_theme_suggestions_fieldset_alter(array &$suggestions, arra
 function custom_theme_preprocess_node(array &$variables) {
   // Default to turning off byline/submitted.
   //$variables['display_submitted'] = FALSE;
+  $variables['base_path'] = base_path();
 }
 
 /**
