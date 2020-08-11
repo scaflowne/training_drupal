@@ -44,7 +44,7 @@ class SimpleForm extends FormBase {
   protected $time;
 
   /**
-   * Constructs a new ListingEmpty.
+   * Constructs a new SimpleForm.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.

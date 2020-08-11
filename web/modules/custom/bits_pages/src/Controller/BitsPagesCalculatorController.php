@@ -20,7 +20,7 @@ class BitsPagesCalculatorController extends ControllerBase {
   protected $currentUser;
 
   /**
-   * Constructs a new ListingEmpty.
+   * Constructs a new BitsPagesCalculatorController.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
