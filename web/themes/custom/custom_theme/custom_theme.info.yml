@@ -1,0 +1,9 @@
+name: Custom theme
+type: theme
+description: 'Our cool gererated theme.'
+package: CustomTheme
+core: 8.x
+libraries:
+  - custom_theme/global-styling
+ 
+base theme: bartik
