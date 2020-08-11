@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * @file
+ * Contains bits_forms.module.
+ */
+
+ /**
+ * Implements hook_schema().
+ */
+function bits_database_schema() {
+  // Create bits_database_example table
+  $schema['bits_database_example'] = [
+    'description' => 'The base table for bits database example.',
+    'fields' => [
+      'id' => [
+        'description' => 'The primary identifier for a Simple Form.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'The UID of the user',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'status' => [
+        'description' => 'The Bool status',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'title' => [
+        'description' => 'The title.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'type' => [
+        'description' => 'The title.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'ip' => [
+        'description' => 'The title.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'timestamp' => [
+        'description' => 'timestamp of content.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'id',
+    ],
+  ];
+
+  // Create bits_database_counter table
+  $schema['bits_database_counter'] = [
+    'description' => 'The base table for bits database counter.',
+    'fields' => [
+      'route' => [
+        'description' => 'The route.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'The UID of the user',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'user_count' => [
+        'description' => 'The user_count of the user',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'lastcount' => [
+        'description' => 'timestamp of count.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'route',
+      'uid',
+    ],
+  ];
+
+  return $schema;
+}

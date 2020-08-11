@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Contains bits_database.module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function bits_database_uninstall(){
+  // Delete schema bits database example
+  drupal_uninstall_schema('bits_database_example');
+  // Delete schema bits database counter
+  drupal_uninstall_schema('bits_database_counter');
+}
