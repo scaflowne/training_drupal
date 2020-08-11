@@ -1,0 +1,33 @@
+{#
+bits_users/templates/my-template.html.twig
+variables
+- current_user:
+  - uid
+  - displayName
+  - roles
+  - email
+  - lastAccessedTime
+#}
+
+
+<div>
+  UID: {{ current_user.uid }}
+</div>
+<div>
+  Display Name: {{ current_user.displayName }}
+</div>
+<div>
+  Roles:
+  <ul>
+    {% for rol in current_user.roles %}
+      <li>{{ rol|e }}</li>
+    {% endfor %}
+  </ul>
+</div>
+<div>
+  Email: {{ current_user.email }}
+</div>
+<div>
+  Last Access: {{ current_user.lastAccessedTime|date("F jS \\a\\t g:ia") }}
+</div>
+

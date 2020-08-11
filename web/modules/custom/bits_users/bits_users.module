@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains bits_users.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function bits_users_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the bits_users module.
+    case 'help.page.bits_users':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Custom Bits Users') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function bits_users_theme($existing, $type, $theme, $path) {
+  return [
+    'user_block' => [
+      'variables' => ['current_user' => NULL],
+    ],
+  ];
+}
