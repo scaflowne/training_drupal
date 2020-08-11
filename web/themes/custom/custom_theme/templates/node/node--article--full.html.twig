@@ -101,14 +101,8 @@
 		{% endif %}
 	</header>
 
-  {% if is_admin %}
-    <div class="custom-information">
-      <div>{{ 'title: '|t|capitalize ~ node.getTitle() }}</div>
-      <div>{{ 'autor: '|t|capitalize ~ node.Owner.name.value }}</div>
-      <div>{{ 'tipo de contenido: '|t|capitalize ~ node.bundle }}</div>
-      <div>{{ 'fecha de publicación: '|t|capitalize ~ node.getCreatedTime|date("m/d/Y") }}</div>
-    </div>
-  {% endif %}
+  {% import 'themes/custom/custom_theme/templates/partials/custom-information.html.twig' as info %}
+  {{ info.customInformation(is_admin, node) }}
 
 	<div{{content_attributes.addClass('node__content','clearfix')}}>
 		{{ content }}
