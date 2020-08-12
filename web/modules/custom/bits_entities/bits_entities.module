@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * @file
+ * Contains bits_entities.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_help().
+ */
+function bits_entities_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the bits_entities module.
+    case 'help.page.bits_entities':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Custom Bits Entities') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function bits_entities_theme_suggestions_page_title_alter(
+  array &$suggestions, array $variables) {
+  // Get node
+  $node = \Drupal::routeMatch()->getParameter('node');
+  // Add news theme suggestions
+  if (!empty($node) && is_object($node)) {
+    $suggestions[] = 'page_title__node';
+    $suggestions[] = 'page_title__node_' . $node->getType();
+  }
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function bits_entities_preprocess_page_title(&$variables) {
+  // Get node
+  $node = \Drupal::request()->attributes->get('node');
+  // Add prefix to title
+  if (!empty($node) && is_object($node)) {
+    $variables['title'] = t('@type: @title ',
+      ['@type'=> $node->bundle(),'@title' => $node->getTitle()]
+    );
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function bits_entities_user_insert(EntityInterface $entity) {
+  // Create Presentation Page
+  $node = Node::create([
+    'type' => 'page',
+    'langcode' => 'en',
+    'created' => REQUEST_TIME,
+    'changed' => REQUEST_TIME,
+    'uid' => $entity->id(),
+    'title' => t('Presentación de @username',
+      ['@username' => $entity->getAccountName()]
+    ),
+    'field_tags' =>[2],
+    'body' => [
+      'summary' => '',
+      'value' => '<p>The body of my node.</p>',
+      'format' => 'full_html',
+    ],
+  ]);
+  $node->save();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function bits_entities_user_delete(EntityInterface $entity) {
+  // Load nodes by UID.
+  $nodes = \Drupal::entityTypeManager()
+    ->getStorage('node')
+    ->loadByProperties(['uid' => $entity->id()]);
+  // Delete nodes by UID.
+  foreach ($nodes as $node) {
+    $node->delete();
+  }
+}
