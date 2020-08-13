@@ -4,7 +4,7 @@ entity.bits_entities_message.collection:
   title: 'Message list'
   route_name: entity.bits_entities_message.collection
   description: 'List Message entities'
-  parent: system.admin_structure
+  parent: system.admin_content
   weight: 100
 
 bits_entities_message.admin.structure.settings:
